@@ -16,7 +16,7 @@ Examples:
     ./element_text_converter.py Geoffrey
     ./element_text_converter.py --full Geoffrey
     ./element_text_converter.py -i --full HDT
-    ./element_text_converter.py -i Dara      # prefers Da Ra over D Ar + failure
+    ./element_text_converter.py -i Dsra      # prefers Ds Ra over D Ar + failure
 """
 
 from __future__ import annotations
