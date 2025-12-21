@@ -147,15 +147,10 @@ ELEMENT_LOOKUP: Dict[str, Element] = {element.symbol: element for element in ELE
 
 
 def normalize_text(text: str) -> str:
-    """Remove all whitespace characters (spaces, tabs, newlines, etc.)."""
     return "".join(text.split())
 
 
 def find_symbol_sequence(text: str) -> Optional[List[str]]:
-    """
-    Return a list of element symbols that spell out `text`, or None if impossible.
-    Uses a simple dynamic-programming approach to find one valid decomposition.
-    """
     cleaned = normalize_text(text)
     if not cleaned:
         return []
@@ -176,9 +171,8 @@ def find_symbol_sequence(text: str) -> Optional[List[str]]:
 
             candidate = target[index:end].capitalize()
             if candidate in ELEMENT_LOOKUP:
-                next_path = paths[index] + [candidate]
                 if paths[end] is None:
-                    paths[end] = next_path
+                    paths[end] = paths[index] + [candidate]
 
     return paths[length]
 
@@ -199,18 +193,13 @@ def explain_failure(text: str) -> str:
             if end > length:
                 continue
 
-            candidate = target[index:end].capitalize()
-            if candidate in ELEMENT_LOOKUP:
+            if target[index:end].capitalize() in ELEMENT_LOOKUP:
                 reachable[end] = True
 
-    if reachable[length]:
-        return "Conversion not possible for unknown reasons."
-
-    furthest = max(idx for idx, flag in enumerate(reachable) if flag)
+    furthest = max(i for i, ok in enumerate(reachable) if ok)
     problematic = normalized[furthest:]
-    human_position = furthest + 1
     return (
-        f"Conversion not possible. Letters starting at position {human_position} "
+        f'Conversion not possible. Letters starting at position {furthest + 1} '
         f'("{problematic}") cannot be matched with element symbols.'
     )
 
@@ -220,13 +209,11 @@ def format_symbols(symbols: Sequence[str]) -> str:
 
 
 def format_element_names(symbols: Sequence[str]) -> str:
-    names = [ELEMENT_LOOKUP[symbol].name for symbol in symbols]
-    return " ".join(names)
+    return " ".join(ELEMENT_LOOKUP[s].name for s in symbols)
 
 
 def format_atomic_numbers(symbols: Sequence[str]) -> str:
-    numbers = [str(ELEMENT_LOOKUP[symbol].atomic_number) for symbol in symbols]
-    return " ".join(numbers)
+    return " ".join(str(ELEMENT_LOOKUP[s].atomic_number) for s in symbols)
 
 
 def convert_text(text: str, show_full: bool) -> str:
@@ -239,7 +226,8 @@ def convert_text(text: str, show_full: bool) -> str:
 
     return (
         f"{format_symbols(symbols)}\n"
-        f"{format_element_names(symbols)}"
+        f"{format_element_names(symbols)}\n"
+        f"{format_atomic_numbers(symbols)}"
     )
 
 
@@ -251,16 +239,15 @@ def parse_args() -> argparse.Namespace:
         "-f",
         "--full",
         action="store_true",
-        help="Output symbols and element names instead of atomic numbers.",
+        help="Output symbols, element names, and atomic numbers.",
     )
-    parser.add_argument("text", help="The text to convert, e.g., Geoffrey.")
+    parser.add_argument("text", help="The text to convert.")
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    result = convert_text(args.text, args.full)
-    print(result)
+    print(convert_text(args.text, args.full))
 
 
 if __name__ == "__main__":  # pragma: no cover
