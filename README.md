@@ -30,8 +30,8 @@ The script attempts to decompose the input text into valid 1- or 2-letter chemic
 
 ### Options
 
-|------|----------|
 |Option|Description|
+|------|----------|
 |--full, -f|Output symbols, element names, and atomic numbers|
 |(default)|	Output atomic numbers only|
 
