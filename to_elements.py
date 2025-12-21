@@ -5,7 +5,7 @@ Convert text into sequences of chemical element symbols or atomic numbers.
 
 Examples:
     python element_text_converter.py Geoffrey
-    python element_text_converter.py Geoffrey --atomic
+    python element_text_converter.py --full Geoffrey
 """
 
 from __future__ import annotations
@@ -229,12 +229,12 @@ def format_atomic_numbers(symbols: Sequence[str]) -> str:
     return " ".join(numbers)
 
 
-def convert_text(text: str, show_atomic_numbers: bool) -> str:
+def convert_text(text: str, show_full: bool) -> str:
     symbols = find_symbol_sequence(text)
     if symbols is None:
         return explain_failure(text)
 
-    if show_atomic_numbers:
+    if not show_full:
         return format_atomic_numbers(symbols)
 
     return (
@@ -247,19 +247,19 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Convert text to chemical element symbols or atomic numbers."
     )
-    parser.add_argument("text", help="The text to convert, e.g., Geoffrey.")
     parser.add_argument(
-        "-a",
-        "--atomic",
+        "-f",
+        "--full",
         action="store_true",
-        help="Output atomic numbers instead of symbols and element names.",
+        help="Output symbols and element names instead of atomic numbers.",
     )
+    parser.add_argument("text", help="The text to convert, e.g., Geoffrey.")
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    result = convert_text(args.text, args.atomic)
+    result = convert_text(args.text, args.full)
     print(result)
 
 
