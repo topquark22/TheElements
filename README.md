@@ -76,7 +76,7 @@ This is the inverse operation of the first script’s atomic-number output.
 ### Validation Rules
 
 The script rejects input if any token:
-- Is not a valid decimal integer
+- Is not a valid decimal integer, or one of the special isotope values "1.2" or "1.3"
 - Is outside the range 1–118
 - Is missing or empty
 
