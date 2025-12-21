@@ -13,10 +13,10 @@ Important: when isotopes are enabled, the algorithm DISCOURAGES using D/T.
 It will prefer solutions that avoid D and T when possible (minimizes isotope usage).
 
 Examples:
-    ./element_text_converter.py Geoffrey
-    ./element_text_converter.py --full Geoffrey
-    ./element_text_converter.py -i --full HDT
-    ./element_text_converter.py -i Dsra      # prefers Ds Ra over D Sr -> failure
+    ./to_elements.py Geoffrey
+    ./to_elements.py --full Geoffrey
+    ./to_elements.py -i --full HDT
+    ./to_elements.py -i Dsra      # prefers Ds Ra over D Sr -> failure
 """
 
 from __future__ import annotations
