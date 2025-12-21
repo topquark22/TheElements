@@ -61,4 +61,25 @@ If the conversion is not possible (because element symbols do not exist for thos
 $ ./to_elements.py Hello
 Conversion not possible. Letters starting at position 3 ("llo") cannot be matched with element symbols.
 ```
+---
+
+## Script 2: `from_elements.py`
+
+### Purpose
+
+Convert a whitespace-separated sequence of atomic numbers (decimal) into a concatenated string of element symbols.
+
+This is the inverse operation of the first script’s atomic-number output.
+
+### Validation Rules
+
+The script rejects input if any token:
+- Is not a valid decimal integer
+- Is outside the range 1–118
+- Is missing or empty
+
+### Usage
+```
+./from_elements.py NUMBER [NUMBER ...]
+```
 
