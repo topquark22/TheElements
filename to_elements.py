@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 """
-Convert text into sequences of chemical element symbols or atomic numbers.
+Convert text into sequences of chemical element symbols or atomic numbers (if possible).
+Not every string can be converted to chemical element symbols, but if 2-letter symbols
+are available, they will be used.
 
 Examples:
-    python element_text_converter.py Geoffrey
-    python element_text_converter.py --full Geoffrey
+    ./to_elements.py Geoffrey
+    ./to_elements.py --full Geoffrey
 """
 
 from __future__ import annotations
