@@ -2,8 +2,8 @@
 set -euo pipefail
 
 # Simple test runner for:
-#   element_text_converter.py
-#   atomic_to_symbols.py
+#   to_elements.py
+#   from_elements.py
 #
 # Usage:
 #   bash test.sh
