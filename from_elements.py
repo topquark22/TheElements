@@ -23,6 +23,7 @@ def parse_atomic_ids(tokens: Sequence[str]) -> List[str]:
         raise ValueError("No atomic IDs provided.")
 
     ids: List[str] = []
+    allowed_isotope_ids = {"1.2", "1.3"}
 
     for idx, raw in enumerate(tokens, start=1):
         s = raw.strip()
@@ -36,7 +37,7 @@ def parse_atomic_ids(tokens: Sequence[str]) -> List[str]:
             ids.append(str(value))
             continue
 
-        if s in {"1.2", "1.3"}:
+        if s in allowed_isotope_ids:
             ids.append(s)
             continue
 
