@@ -30,10 +30,12 @@ The script attempts to decompose the input text into valid 1- or 2-letter chemic
 
 ### Options
 
-|Option|Description|
-|------|----------|
-|--full, -f|Output symbols, element names, and atomic numbers|
-|(default)|	Output atomic numbers only|
+|Option|Description|Default|
+|------|----------|-------|
+|--full, -f|Output symbols, element names, and atomic numbers|Output atomic numbers only|
+|--isotopes, -i|Support for the symbols D (Deuterium), T (Tritium)|D, T not supported|
+
+If the latter option is enabled, then D is represented by 1.2, and T by 1.3.
 
 ### Examples
 
