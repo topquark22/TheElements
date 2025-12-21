@@ -146,12 +146,17 @@ ELEMENTS: Sequence[Element] = (
 ELEMENT_LOOKUP: Dict[str, Element] = {element.symbol: element for element in ELEMENTS}
 
 
+def normalize_text(text: str) -> str:
+    """Remove all whitespace characters (spaces, tabs, newlines, etc.)."""
+    return "".join(text.split())
+
+
 def find_symbol_sequence(text: str) -> Optional[List[str]]:
     """
     Return a list of element symbols that spell out `text`, or None if impossible.
     Uses a simple dynamic-programming approach to find one valid decomposition.
     """
-    cleaned = text.strip()
+    cleaned = normalize_text(text)
     if not cleaned:
         return []
 
@@ -179,7 +184,8 @@ def find_symbol_sequence(text: str) -> Optional[List[str]]:
 
 
 def explain_failure(text: str) -> str:
-    target = text.strip().lower()
+    normalized = normalize_text(text)
+    target = normalized.lower()
     length = len(target)
     reachable = [False] * (length + 1)
     reachable[0] = True
@@ -201,7 +207,7 @@ def explain_failure(text: str) -> str:
         return "Conversion not possible for unknown reasons."
 
     furthest = max(idx for idx, flag in enumerate(reachable) if flag)
-    problematic = text[furthest:]
+    problematic = normalized[furthest:]
     human_position = furthest + 1
     return (
         f"Conversion not possible. Letters starting at position {human_position} "
