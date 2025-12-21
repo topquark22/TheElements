@@ -18,12 +18,11 @@ from typing import Dict, List, Sequence
 from elements_data import atomic_id_to_symbol
 
 
-def parse_atomic_ids(tokens: Sequence[str], enable_isotopes: bool) -> List[str]:
+def parse_atomic_ids(tokens: Sequence[str]) -> List[str]:
     if not tokens:
         raise ValueError("No atomic IDs provided.")
 
     ids: List[str] = []
-    allowed_isotope_ids = {"1.2", "1.3"} if enable_isotopes else set()
 
     for idx, raw in enumerate(tokens, start=1):
         s = raw.strip()
@@ -37,7 +36,7 @@ def parse_atomic_ids(tokens: Sequence[str], enable_isotopes: bool) -> List[str]:
             ids.append(str(value))
             continue
 
-        if s in allowed_isotope_ids:
+        if s in {"1.2", "1.3"}:
             ids.append(s)
             continue
 
@@ -57,12 +56,6 @@ def parse_args() -> argparse.Namespace:
         description="Convert atomic IDs to concatenated element symbols."
     )
     parser.add_argument(
-        "-i",
-        "--isotopes",
-        action="store_true",
-        help='Enable Hydrogen isotope IDs: "1.2" (D) and "1.3" (T).',
-    )
-    parser.add_argument(
         "ids",
         nargs="+",
         help='Atomic IDs: 1..118 (and optionally "1.2"/"1.3" with --isotopes).',
@@ -73,10 +66,10 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
 
-    id_to_symbol: Dict[str, str] = atomic_id_to_symbol(args.isotopes)
+    id_to_symbol: Dict[str, str] = atomic_id_to_symbol(args)
 
     try:
-        ids = parse_atomic_ids(args.ids, args.isotopes)
+        ids = parse_atomic_ids(args.ids)
         print("".join(id_to_symbol[a] for a in ids))
     except ValueError as exc:
         raise SystemExit(f"Error: {exc}") from exc
