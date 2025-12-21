@@ -3,7 +3,7 @@
 """
 Convert text into sequences of chemical element symbols or atomic IDs.
 
-Default behavior uses standard element symbols only.
+Default behaviour uses standard element symbols only.
 Use --isotopes (or -i) to enable Hydrogen isotopes:
   H -> 1
   D -> 1.2
