@@ -4,9 +4,8 @@
 Convert a whitespace-separated sequence of atomic IDs into concatenated
 element symbols.
 
-By default, only standard atomic numbers 1..118 are accepted.
-
-Use --isotopes (or -i) to additionally accept:
+Standard atomic numbers 1..118 are accepted.
+Also, the values of the isotopes of Hydrogen are accepted:
   "1.2" -> D (Deuterium)
   "1.3" -> T (Tritium)
 """
