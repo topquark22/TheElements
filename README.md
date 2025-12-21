@@ -6,7 +6,6 @@ Together, they allow round-trip conversion:
 
 Text ⇄ Element symbols ⇄ Atomic numbers
 
-
 Both scripts are standalone, dependency-free, and compatible with Python 3.9+.
 
 ---
@@ -25,14 +24,16 @@ The script attempts to decompose the input text into valid 1- or 2-letter chemic
 
 ### Usage
 
-```bash
-./element_text_converter.py [--full] TEXT
+```
+./to_elements.py [--full] TEXT
+```
 
+### Options
 
-Options
-Option	Description
---full, -f	Output symbols, element names, and atomic numbers
-(default)	Output atomic numbers only
+|------|----------|
+|Option|Description|
+|--full, -f|Output symbols, element names, and atomic numbers|
+|(default)|	Output atomic numbers only|
 
 ### Examples
 
