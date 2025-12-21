@@ -3,9 +3,16 @@
 """
 Convert text into sequences of chemical element symbols or atomic IDs.
 
+Default behavior uses standard element symbols only.
+Use --isotopes to enable Hydrogen isotopes:
+  H -> 1
+  D -> 1.2
+  T -> 1.3
+
 Examples:
-    to_elements.py Geoffrey
-    to_elements.py --full Geoffrey
+    ./to_elements.py Geoffrey
+    ./to_elements.py.py --full Geoffrey
+    ./to_elements.py.py --isotopes --full "HDT"
 """
 
 from __future__ import annotations
@@ -22,13 +29,8 @@ class Element:
     atomic_id: str  # string to support isotope IDs like "1.2"
 
 
-ELEMENTS: Sequence[Element] = (
-    # Hydrogen isotopes
+STANDARD_ELEMENTS: Sequence[Element] = (
     Element("H", "Hydrogen", "1"),
-    Element("D", "Deuterium", "1.2"),
-    Element("T", "Tritium", "1.3"),
-
-    # Standard periodic table
     Element("He", "Helium", "2"),
     Element("Li", "Lithium", "3"),
     Element("Be", "Beryllium", "4"),
@@ -148,48 +150,63 @@ ELEMENTS: Sequence[Element] = (
     Element("Og", "Oganesson", "118"),
 )
 
-ELEMENT_LOOKUP: Dict[str, Element] = {e.symbol: e for e in ELEMENTS}
+ISOTOPE_ELEMENTS: Sequence[Element] = (
+    Element("D", "Deuterium", "1.2"),
+    Element("T", "Tritium", "1.3"),
+)
+
+
+def build_element_lookup(enable_isotopes: bool) -> Dict[str, Element]:
+    elements: List[Element] = list(STANDARD_ELEMENTS)
+    if enable_isotopes:
+        elements.extend(ISOTOPE_ELEMENTS)
+    return {e.symbol: e for e in elements}
 
 
 def normalize_text(text: str) -> str:
     return "".join(text.split())
 
 
-def find_symbol_sequence(text: str) -> Optional[List[str]]:
+def find_symbol_sequence(text: str, lookup: Dict[str, Element]) -> Optional[List[str]]:
     cleaned = normalize_text(text)
     if not cleaned:
         return []
 
     target = cleaned.lower()
-    paths: List[Optional[List[str]]] = [None] * (len(target) + 1)
+    length = len(target)
+    paths: List[Optional[List[str]]] = [None] * (length + 1)
     paths[0] = []
 
-    for i in range(len(target)):
+    for i in range(length):
         if paths[i] is None:
             continue
+
         for size in (1, 2):
             j = i + size
-            if j > len(target):
+            if j > length:
                 continue
             candidate = target[i:j].capitalize()
-            if candidate in ELEMENT_LOOKUP and paths[j] is None:
+            if candidate in lookup and paths[j] is None:
                 paths[j] = paths[i] + [candidate]
 
-    return paths[len(target)]
+    return paths[length]
 
 
-def explain_failure(text: str) -> str:
+def explain_failure(text: str, lookup: Dict[str, Element]) -> str:
     normalized = normalize_text(text)
     target = normalized.lower()
-    reachable = [False] * (len(target) + 1)
+    length = len(target)
+    reachable = [False] * (length + 1)
     reachable[0] = True
 
-    for i in range(len(target)):
+    for i in range(length):
         if not reachable[i]:
             continue
         for size in (1, 2):
             j = i + size
-            if j <= len(target) and target[i:j].capitalize() in ELEMENT_LOOKUP:
+            if j > length:
+                continue
+            if target[i:j].capitalize() in lookup:
                 reachable[j] = True
 
     furthest = max(i for i, ok in enumerate(reachable) if ok)
@@ -199,18 +216,19 @@ def explain_failure(text: str) -> str:
     )
 
 
-def convert_text(text: str, show_full: bool) -> str:
-    symbols = find_symbol_sequence(text)
+def convert_text(text: str, show_full: bool, enable_isotopes: bool) -> str:
+    lookup = build_element_lookup(enable_isotopes)
+    symbols = find_symbol_sequence(text, lookup)
     if symbols is None:
-        return explain_failure(text)
+        return explain_failure(text, lookup)
 
     if not show_full:
-        return " ".join(ELEMENT_LOOKUP[s].atomic_id for s in symbols)
+        return " ".join(lookup[s].atomic_id for s in symbols)
 
     return (
         " ".join(symbols) + "\n"
-        + " ".join(ELEMENT_LOOKUP[s].name for s in symbols) + "\n"
-        + " ".join(ELEMENT_LOOKUP[s].atomic_id for s in symbols)
+        + " ".join(lookup[s].name for s in symbols) + "\n"
+        + " ".join(lookup[s].atomic_id for s in symbols)
     )
 
 
@@ -218,15 +236,26 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Convert text to chemical element symbols or atomic IDs."
     )
-    parser.add_argument("-f", "--full", action="store_true")
-    parser.add_argument("text")
+    parser.add_argument(
+        "-f",
+        "--full",
+        action="store_true",
+        help="Output symbols, element names, and atomic IDs.",
+    )
+    parser.add_argument(
+        "-i",
+        "--isotopes",
+        action="store_true",
+        help='Enable Hydrogen isotopes: D -> "1.2", T -> "1.3".',
+    )
+    parser.add_argument("text", help="The text to convert.")
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    print(convert_text(args.text, args.full))
+    print(convert_text(args.text, args.full, args.isotopes))
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     main()
