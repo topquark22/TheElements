@@ -25,7 +25,7 @@ The script attempts to decompose the input text into valid 1- or 2-letter chemic
 ### Usage
 
 ```
-./to_elements.py [--full] TEXT
+./to_elements.py [--full | -f] [--isotopes | -i] TEXT
 ```
 
 ### Options
@@ -86,7 +86,7 @@ The script rejects input if any token:
 ```
 ## *Footnote*
 
-*Dedicated to Tom Lehrer, and his amazing song "The Elements." Unfortunately, his name does not pass the algorithm, because there's no element with name T or To, and not even Thomas works, unfortunately. Does your name work? My name does. Let me know in the discussions.*
+*Dedicated to Tom Lehrer, and his amazing song "The Elements." Unfortunately, Tom's name does not pass the algorithm, because there's no element with name T or To, and not even Thomas works, unfortunately. Does your name work? My name does (but not my middle name.) Let me know in the discussions.*
 
 *Here's an interesting question: We know that not every name will work. But, what is the percentage that does? It seems to be pretty small.*
 
