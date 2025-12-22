@@ -96,12 +96,8 @@ out="$(run_ok "$PYTHON" "$TO" --full Geoffrey)"
 expected=$'Ge O F F Re Y\nGermanium Oxygen Fluorine Fluorine Rhenium Yttrium\n32 8 9 9 75 39'
 assert_eq "$out" "$expected"
 
-echo "== Test: isotopes OFF rejects 1.2/1.3 in atomic_to_symbols =="
-out="$(run_fail "$PYTHON" "$FROM" 1.2 8)"
-assert_contains "$out" "Error:" "should reject isotope id without -i/--isotopes"
-
-echo "== Test: isotopes ON accepts 1.2/1.3 in atomic_to_symbols =="
-out="$(run_ok "$PYTHON" "$FROM" -i 1 1.2 1.3 8)"
+echo "== Test: Accept 1.2/1.3 in $FROM =="
+out="$(run_ok "$PYTHON" "$FROM" 1 1.2 1.3 8)"
 assert_eq "$out" "HDTO"
 
 echo "== Test: isotopes OFF does not match D/T as symbols in text converter =="
@@ -113,6 +109,7 @@ echo "== Test: isotopes ON matches D/T and prints correct atomic IDs =="
 out="$(run_ok "$PYTHON" "$TO" -i HDT)"
 assert_eq "$out" "1 1.2 1.3"
 
+echo "== Test: isotopes ON matches D/T and prints correct full output =="
 out="$(run_ok "$PYTHON" "$TO" -i --full HDT)"
 expected=$'H D T\nHydrogen Deuterium Tritium\n1 1.2 1.3'
 assert_eq "$out" "$expected"

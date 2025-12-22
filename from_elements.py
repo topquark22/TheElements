@@ -41,7 +41,7 @@ def parse_atomic_ids(tokens: Sequence[str]) -> List[str]:
             ids.append(s)
             continue
 
-        extra = ' (enable --isotopes / -i for "1.2" / "1.3")' if not enable_isotopes else ""
+        extra = ' ("1.2" / "1.3")'
         raise ValueError(
             f'Token #{idx} "{raw}" is not a valid atomic ID. Use 1..118{extra}.'
         )
