@@ -84,7 +84,7 @@ The script rejects input if any token:
 ```
 ./from_elements.py NUMBER [NUMBER ...]
 ```
-### *Footnote*
+## *Footnote*
 
 *Dedicated to Tom Lehrer, and his amazing song "The Elements." Unfortunately, his name does not pass the algorithm, because there's no element with name T or To, and not even Thomas works, unfortunately. Does your name work? My name does. Let me know in the discussions.*
 
