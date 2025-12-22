@@ -134,6 +134,10 @@ assert_contains "$out" "out of range" "0 should be rejected"
 out="$(run_fail "$PYTHON" "$FROM" 119)"
 assert_contains "$out" "out of range" "119 should be rejected"
 
+echo "== Test: invalid isotope token rejection =="
+out="$(run_fail "$PYTHON" "$FROM" 1.4)"
+assert_contains "$out" "not a valid atomic ID" "1.4 should be rejected"
+
 echo "== Test: non-decimal token rejection =="
 out="$(run_fail "$PYTHON" "$FROM" 12x 3)"
 assert_contains "$out" "not a valid atomic ID" "12x should be rejected"
