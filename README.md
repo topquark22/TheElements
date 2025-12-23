@@ -37,7 +37,7 @@ The script attempts to decompose the input text into valid 1- or 2-letter chemic
 |--names, -m|Output full element names|
 |--isotopes, -i|Include symbols D (Deuterium), T (Tritium)|
 
-If none of the output options are enabled, it defaults to "-n" (Atomic numbers only).
+If none of the output options are enabled, it defaults to "-s" (symbols only).
 
 If the `isotopes` option is enabled, then D is represented by 1.2, and T by 1.3.
 
@@ -104,13 +104,13 @@ The script rejects input if any token:
 
 ## *Footnote*
 
-*Dedicated to Tom Lehrer, and his amazing song "The Elements." Unfortunately, Tom's name does not pass the algorithm, because there's no element with name (or isotope) `Tol`, and not even Thomas works. The best I could do was to abbreviate his middle and last names, giving (with isotopes):*
+*Dedicated to Tom Lehrer, and his amazing song "The Elements." Unfortunately, Tom's name does not pass the algorithm, because there's no element with name (or isotope) `Tom`, and not even Thomas works. The best I could do was to abbreviate his middle and last names, giving (with isotopes):*
 ```
 $ ./to_elements.py -s -i 'Tom drew Lr.'
 T O Md Re W Lr
 ```
 *We know that not every name will work. But, what is the percentage that does? It seems to be pretty small.*
 
-*Yours,
+*Yours truly,
 32 8 9 9 75 39 9 13 19*
 
