@@ -25,35 +25,48 @@ The script attempts to decompose the input text into valid 1- or 2-letter chemic
 ### Usage
 
 ```
-./to_elements.py [--full | -f] [--isotopes | -i] TEXT
+./to_elements.py [--symbols | -s] [--numbers | -n] [--names | -m] [--isotopes | -t] TEXT
 ```
 
 ### Options
 
-|Option|Description|Default|
-|------|----------|-------|
-|--full, -f|Output symbols, element names, and atomic numbers|Output atomic numbers only|
-|--isotopes, -i|Availability of the symbols D (Deuterium), T (Tritium)|D, T not available|
+|Option|Description|
+|------|----------|
+|--numbers, -n|Output atomic numbers|
+|--symbols, -s|Output symbols|
+|--names, -m|Output full element names|
+|--isotopes, -i|Include symbols D (Deuterium), T (Tritium)|
 
-If the latter option is enabled, then D is represented by 1.2, and T by 1.3.
+If none of the output options are enabled, it defaults to "-n" (Atomic numbers only).
+
+If the `isotopes` option is enabled, then D is represented by 1.2, and T by 1.3.
 
 ### Examples
 
-Convert text to atomic numbers (default mode):
-
 ```
-$ ./to_elements.py Geoffrey
+$ ./to_elements.py -n Geoffrey
 32 8 9 9 75 39
-```
 
-Full output mode:
-
-```
-$ ./to_elements.py --full Geoffrey
+$ ./to_elements.py -s Geoffrey
 Ge O F F Re Y
-Germanium Oxygen Fluorine Fluorine Rhenium Yttrium
-32 8 9 9 75 39
+``````
+
+
+Full output mode (note the order of the options does not matter):
+
 ```
+$ ./to_elements.py -s -m -n Geoffrey
+Ge O F F Re Y
+32 8 9 9 75 39
+Germanium Oxygen Fluorine Fluorine Rhenium Yttrium
+```
+
+Hydrogen isotopes:
+```
+./to_elements.py -s -n -i HDT
+H D T
+1 1.2 1.3
+````
 
 Whitespace is ignored in the input string.
 
@@ -91,12 +104,10 @@ The script rejects input if any token:
 
 ## *Footnote*
 
-*Dedicated to Tom Lehrer, and his amazing song "The Elements." Unfortunately, Tom's name does not pass the algorithm, because there's no element with name (or isotope) `To`, and not even Thomas works The best I could do was to abbreviate his middle and last names, giving (with isotopes):*
+*Dedicated to Tom Lehrer, and his amazing song "The Elements." Unfortunately, Tom's name does not pass the algorithm, because there's no element with name (or isotope) `Tol`, and not even Thomas works. The best I could do was to abbreviate his middle and last names, giving (with isotopes):*
 ```
-$ ./to_elements.py -f -i 'Tom Drew Lr.'
+$ ./to_elements.py -s -i 'Tom drew Lr.'
 T O Md Re W Lr
-Tritium Oxygen Mendelevium Rhenium Tungsten Lawrencium
-1.3 8 101 75 74 103
 ```
 *We know that not every name will work. But, what is the percentage that does? It seems to be pretty small.*
 

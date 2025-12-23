@@ -3,10 +3,15 @@
 """
 Convert text into sequences of chemical element symbols or atomic IDs.
 
-Default mode outputs atomic IDs only.
-Use --full to output symbols, element names, and atomic IDs.
+Output control flags:
 
-Whitespace in the input text is ignored.
+Use --symbols (or -s) to output symbols.
+Use --numbers (or -n) to output atomic numbers.
+Use --names (or -m) to output element names.
+
+Default mode is -n.
+
+Non-alphabetic characters in the input text are ignored.
 
 Use --isotopes (or -i) to enable Hydrogen isotopes:
   D -> 1.2
@@ -126,31 +131,54 @@ def format_atomic_ids(symbols: Sequence[str], lookup: Dict[str, Element]) -> str
     return " ".join(lookup[s].atomic_id for s in symbols)
 
 
-def convert_text(text: str, show_full: bool, enable_isotopes: bool) -> str:
+def convert_text(
+    text: str,
+    show_numbers: bool,
+    show_symbols: bool,
+    show_names: bool,
+    enable_isotopes: bool
+) -> str:
     lookup = symbol_lookup(enable_isotopes)
     symbols = find_symbol_sequence(text, lookup, enable_isotopes)
     if symbols is None:
         return explain_failure(text, lookup)
 
-    if not show_full:
-        return format_atomic_ids(symbols, lookup)
+    # Preserve legacy behavior: if no output flags are set, default to ids.
+    if not (show_numbers or show_symbols or show_names):
+        show_numbers = True
 
-    return (
-        f"{format_symbols(symbols)}\n"
-        f"{format_element_names(symbols, lookup)}\n"
-        f"{format_atomic_ids(symbols, lookup)}"
-    )
+    out: list[str] = []
+    if show_symbols:
+        out.append(format_symbols(symbols))
+    if show_numbers:
+        out.append(format_atomic_ids(symbols, lookup))
+    if show_names:
+        out.append(format_element_names(symbols, lookup))
+
+    return "\n".join(out)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Convert text to chemical element symbols or atomic IDs."
+        description="Convert text to chemical element symbols or atomic numbers."
     )
     parser.add_argument(
-        "-f",
-        "--full",
+        "-n",
+        "--numbers",
         action="store_true",
-        help="Output symbols, element names, and atomic IDs.",
+        help="Output atomic numbers",
+    )
+    parser.add_argument(
+        "-m",
+        "--names",
+        action="store_true",
+        help="Output element names",
+    )
+    parser.add_argument(
+        "-s",
+        "--symbols",
+        action="store_true",
+        help="Output symbols",
     )
     parser.add_argument(
         "-i",
@@ -164,7 +192,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    result = convert_text(args.text, args.full, args.isotopes)
+    result = convert_text(args.text, args.numbers, args.symbols, args.names, args.isotopes)
     print(result)
 
 

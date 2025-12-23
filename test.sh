@@ -79,79 +79,80 @@ command -v "$PYTHON" >/dev/null || fail "python not found: $PYTHON"
 echo "== Ensure scripts are executable (optional) =="
 chmod +x "$TO" "$FROM" || true
 
-echo "== Test: whitespace ignored (basic) =="
+echo "== Test 1: whitespace ignored (basic) =="
 # "Geoffrey" example from earlier: expect specific output in default mode (atomic IDs)
 out="$(run_ok "$PYTHON" "$TO" Geoffrey)"
 # The exact decomposition can vary depending on DP tie-breaks; but with current DP (1/2-letter)
 # it should consistently find: Ge O F F Re Y -> 32 8 9 9 75 39
 assert_eq "$out" "32 8 9 9 75 39"
 
-echo "== Test: Ignore spaces =="
+echo "== Test 2: Ignore spaces =="
 out="$(run_ok "$PYTHON" "$TO" "Ge  off    rey")"
 assert_eq "$out" "32 8 9 9 75 39"
 
-echo "== Test: Ignore all nonalphabetic characters =="
+echo "== Test 3: Ignore all nonalphabetic characters =="
 out="$(run_ok "$PYTHON" "$TO" "Ge.off?r:ey/")"
 assert_eq "$out" "32 8 9 9 75 39"
 
-echo "== Test: full mode outputs symbols + names + atomic IDs =="
-out="$(run_ok "$PYTHON" "$TO" --full Geoffrey)"
-# Expect 3 lines.
-# 1) symbols  2) names  3) atomic IDs
-expected=$'Ge O F F Re Y\nGermanium Oxygen Fluorine Fluorine Rhenium Yttrium\n32 8 9 9 75 39'
+echo "== Test 4: full mode outputs symbols + atomic IDs + names =="
+# order of flags does not matter
+out="$(run_ok "$PYTHON" "$TO" -s -m -n 'Geoffrey')"
+# Expect 3 lines:
+# 1) symbols  2) atomic numbers 3) element names
+expected=$'Ge O F F Re Y\n32 8 9 9 75 39\nGermanium Oxygen Fluorine Fluorine Rhenium Yttrium'
 assert_eq "$out" "$expected"
 
-echo "== Test: Accept 1.2/1.3 in $FROM =="
+echo "== Test 5: Accept 1.2/1.3 in $FROM =="
 out="$(run_ok "$PYTHON" "$FROM" 1 1.2 1.3 8)"
 assert_eq "$out" "HDTO"
 
-echo "== Test: isotopes OFF does not match D/T as symbols in text converter =="
-# Without -i, "HDT" should fail because D and T aren't in the symbol table.
+echo "== Test 6: isotopes OFF does not match D/T as symbols in text converter =="
+# Without -t, "HDT" should fail because D and T aren't in the symbol table.
 out="$(run_ok "$PYTHON" "$TO" HDT)"
-assert_contains "$out" "Conversion not possible" "D/T should be unavailable without -i"
+assert_contains "$out" "Conversion not possible" "D/T should be unavailable without -t"
 
-echo "== Test: isotopes ON matches D/T and prints correct atomic IDs =="
+echo "== Test 7: isotopes ON matches D/T and prints correct atomic IDs =="
 out="$(run_ok "$PYTHON" "$TO" -i HDT)"
 assert_eq "$out" "1 1.2 1.3"
 
-echo "== Test: isotopes ON matches D/T and prints correct full output =="
-out="$(run_ok "$PYTHON" "$TO" -i --full HDT)"
-expected=$'H D T\nHydrogen Deuterium Tritium\n1 1.2 1.3'
+echo "== Test 8: isotopes ON matches D/T and prints correct full output =="
+out="$(run_ok "$PYTHON" "$TO" -s -m -n -i HDT)"
+expected=$'H D T\n1 1.2 1.3\nHydrogen Deuterium Tritium'
 assert_eq "$out" "$expected"
 
-echo "== Test: 'Dara' should FAIL with isotopes enabled (negative test) =="
-out="$(run_ok "$PYTHON" "$TO" -i Dara)"
-assert_contains "$out" "Conversion not possible" "Expected Dara to fail when parsed as D + Ar + ..."
+echo "== Test 9: 'DsRa' should FAIL without isotopes enabled (negative test) =="
+out="$(run_ok "$PYTHON" "$TO" DAr)"
+assert_contains "$out" "Conversion not possible" "Expected DAr to fail when parsed as D + Ar"
 
-echo "== Test: 'Dsra' should PASS (Ds + Ra) =="
-out="$(run_ok "$PYTHON" "$TO" -i --full Dsra)"
+echo "== Test 10: 'DsRa' should PASS (Ds + Ra) =="
+out="$(run_ok "$PYTHON" "$TO" -s DsRa)"
 first_line="${out%%$'\n'*}"
 assert_eq "$first_line" "Ds Ra" "Expected Darmstadtium + Radium decomposition"
 
-echo "== Test: atomic_to_symbols basic round-trip =="
+echo "== Test 11: atomic_to_symbols basic round-trip =="
 ids="$(run_ok "$PYTHON" "$TO" Geoffrey)"
 sym="$(run_ok "$PYTHON" "$FROM" $ids)"
 assert_eq "$sym" "GeOFFReY"
 
-echo "== Test: range validation =="
+echo "== Test 11: range validation =="
 out="$(run_fail "$PYTHON" "$FROM" 0)"
 assert_contains "$out" "out of range" "0 should be rejected"
 out="$(run_fail "$PYTHON" "$FROM" 119)"
 assert_contains "$out" "out of range" "119 should be rejected"
 
-echo "== Test: invalid isotope token rejection =="
+echo "== Test 12: invalid isotope token rejection =="
 out="$(run_fail "$PYTHON" "$FROM" 1.4)"
 assert_contains "$out" "not a valid atomic ID" "1.4 should be rejected"
 
-echo "== Test: non-decimal token rejection =="
+echo "== Test 13: non-decimal token rejection =="
 out="$(run_fail "$PYTHON" "$FROM" 12x 3)"
 assert_contains "$out" "not a valid atomic ID" "12x should be rejected"
 
-echo "== Test: empty/whitespace token should fail as 'No atomic IDs provided.' =="
+echo "== Test 14: empty/whitespace token should fail as 'No atomic IDs provided.' =="
 out="$(run_fail "$PYTHON" "$FROM" "")"
 assert_contains "$out" "No atomic IDs provided." "empty token should be treated as no input"
 
-echo "== Test: does converter fail cleanly on impossible string =="
+echo "== Test 15: does converter fail cleanly on impossible string =="
 out="$(run_ok "$PYTHON" "$TO" "zzzz")"
 assert_contains "$out" "Conversion not possible" "impossible conversion should explain failure"
 
