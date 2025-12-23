@@ -86,7 +86,12 @@ out="$(run_ok "$PYTHON" "$TO" Geoffrey)"
 # it should consistently find: Ge O F F Re Y -> 32 8 9 9 75 39
 assert_eq "$out" "32 8 9 9 75 39"
 
-out="$(run_ok "$PYTHON" "$TO" "Ge  off   rey")"
+echo "== Test: Ignore spaces =="
+out="$(run_ok "$PYTHON" "$TO" "Ge  off    rey")"
+assert_eq "$out" "32 8 9 9 75 39"
+
+echo "== Test: Ignore all nonalphabetic characters =="
+out="$(run_ok "$PYTHON" "$TO" "Ge.off?r:ey/")"
 assert_eq "$out" "32 8 9 9 75 39"
 
 echo "== Test: full mode outputs symbols + names + atomic IDs =="
@@ -145,12 +150,6 @@ assert_contains "$out" "not a valid atomic ID" "12x should be rejected"
 echo "== Test: empty/whitespace token should fail as 'No atomic IDs provided.' =="
 out="$(run_fail "$PYTHON" "$FROM" "")"
 assert_contains "$out" "No atomic IDs provided." "empty token should be treated as no input"
-
-echo "== Test: only-whitespace input to text converter (ignored whitespace) =="
-out="$(run_ok "$PYTHON" "$TO" "   ")"
-# find_symbol_sequence returns [] => output is empty line in atomic-id-only mode.
-# print(result) prints a blank line; captured output will be empty string.
-assert_eq "$out" ""
 
 echo "== Test: does converter fail cleanly on impossible string =="
 out="$(run_ok "$PYTHON" "$TO" "zzzz")"
