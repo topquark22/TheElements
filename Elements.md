@@ -5,8 +5,8 @@
 | Atomic # | Symbol | Element Name |
 |--------:|:------:|--------------|
 | 1 | H | Hydrogen |
-| 1.2 | 2H, D | Hydrogen 2 (Deuterium) |
-| 1.3 | 3H, T | Hydrogen 3 (Tritium) |
+| 1.2 | D | Hydrogen 2 (Deuterium) |
+| 1.3 | T | Hydrogen 3 (Tritium) |
 | 2 | He | Helium |
 | 3 | Li | Lithium |
 | 4 | Be | Beryllium |
