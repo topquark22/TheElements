@@ -143,9 +143,9 @@ def convert_text(
     if symbols is None:
         return explain_failure(text, lookup)
 
-    # Preserve legacy behavior: if no output flags are set, default to ids.
+    # If no output flags are set, default to symbols.
     if not (show_numbers or show_symbols or show_names):
-        show_numbers = True
+        show_symbols = True
 
     out: list[str] = []
     if show_symbols:
