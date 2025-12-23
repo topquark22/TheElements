@@ -25,7 +25,7 @@ The script attempts to decompose the input text into valid 1- or 2-letter chemic
 ### Usage
 
 ```
-./to_elements.py [--symbols | -s] [--numbers | -n] [--names | -m] [--isotopes | -t] TEXT
+./to_elements.py [--symbols | -s] [--numbers | -n] [--names | -m] [--isotopes | -i] TEXT
 ```
 
 ### Options
