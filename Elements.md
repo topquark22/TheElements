@@ -231,7 +231,7 @@
 | Sm | Samarium | 62 |
 | Sn | Tin | 50 |
 | Sr | Strontium | 38 |
-| D  | Hydrogen 3 (Tritium) | 1.3 |
+| T  | Hydrogen 3 (Tritium) | 1.3 |
 | Ta | Tantalum | 73 |
 | Tb | Terbium | 65 |
 | Tc | Technetium | 43 |
