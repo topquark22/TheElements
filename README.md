@@ -85,7 +85,9 @@ The script rejects input if any token:
 ./from_elements.py NUMBER [NUMBER ...]
 ```
 
-[## Periodic table of the elements](Elements.md)
+## For reference
+
+[Periodic table of the elements](Elements.md)
 
 ## *Footnote*
 
