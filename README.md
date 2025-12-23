@@ -100,7 +100,7 @@ The script rejects input if any token:
 
 ## For reference
 
-[Periodic table of the elements](Elements.md) as used in the context of this project.
+[Periodic table of the elements](elements.md) as used in the context of this project.
 
 ## *Footnote*
 
