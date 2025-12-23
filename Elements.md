@@ -1,4 +1,4 @@
-# Periodic Table — Elements, Symbols, Atomic Numbers
+# Periodic Table of the Elements
 
 ## Numerical order
 
