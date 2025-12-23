@@ -134,25 +134,25 @@ ids="$(run_ok "$PYTHON" "$TO" Geoffrey)"
 sym="$(run_ok "$PYTHON" "$FROM" $ids)"
 assert_eq "$sym" "GeOFFReY"
 
-echo "== Test 11: range validation =="
+echo "== Test 12: range validation =="
 out="$(run_fail "$PYTHON" "$FROM" 0)"
 assert_contains "$out" "out of range" "0 should be rejected"
 out="$(run_fail "$PYTHON" "$FROM" 119)"
 assert_contains "$out" "out of range" "119 should be rejected"
 
-echo "== Test 12: invalid isotope token rejection =="
+echo "== Test 13: invalid isotope token rejection =="
 out="$(run_fail "$PYTHON" "$FROM" 1.4)"
 assert_contains "$out" "not a valid atomic ID" "1.4 should be rejected"
 
-echo "== Test 13: non-decimal token rejection =="
+echo "== Test 14: non-decimal token rejection =="
 out="$(run_fail "$PYTHON" "$FROM" 12x 3)"
 assert_contains "$out" "not a valid atomic ID" "12x should be rejected"
 
-echo "== Test 14: empty/whitespace token should fail as 'No atomic IDs provided.' =="
+echo "== Test 15: empty/whitespace token should fail as 'No atomic IDs provided.' =="
 out="$(run_fail "$PYTHON" "$FROM" "")"
 assert_contains "$out" "No atomic IDs provided." "empty token should be treated as no input"
 
-echo "== Test 15: does converter fail cleanly on impossible string =="
+echo "== Test 16: does converter fail cleanly on impossible string =="
 out="$(run_ok "$PYTHON" "$TO" "zzzz")"
 assert_contains "$out" "Conversion not possible" "impossible conversion should explain failure"
 
