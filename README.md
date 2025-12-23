@@ -91,9 +91,15 @@ The script rejects input if any token:
 
 ## *Footnote*
 
-*Dedicated to Tom Lehrer, and his amazing song "The Elements." Unfortunately, Tom's name does not pass the algorithm, because there's no element with name T or To, and not even Thomas works, unfortunately. Does your name work? My name does (but not my middle name.) Let me know in the discussions.*
+*Dedicated to Tom Lehrer, and his amazing song "The Elements." Unfortunately, Tom's name does not pass the algorithm, because there's no element with name (or isotope) `To`, and not even Thomas works The best I could do was to abbreviate his middle and last names, giving (with isotopes):*
+```
+$ ./to_elements.py -f -i 'Tom Drew Lr.'
+T O Md Re W Lr
+Tritium Oxygen Mendelevium Rhenium Tungsten Lawrencium
+1.3 8 101 75 74 103
+```
+*We know that not every name will work. But, what is the percentage that does? It seems to be pretty small.*
 
-*Here's an interesting question: We know that not every name will work. But, what is the percentage that does? It seems to be pretty small.*
-
-*32 8 9 9 75 39 9 13 19*
+*Yours,
+32 8 9 9 75 39 9 13 19*
 
