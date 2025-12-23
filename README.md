@@ -84,6 +84,9 @@ The script rejects input if any token:
 ```
 ./from_elements.py NUMBER [NUMBER ...]
 ```
+
+[## Periodic table of the elements](Elements.md)
+
 ## *Footnote*
 
 *Dedicated to Tom Lehrer, and his amazing song "The Elements." Unfortunately, Tom's name does not pass the algorithm, because there's no element with name T or To, and not even Thomas works, unfortunately. Does your name work? My name does (but not my middle name.) Let me know in the discussions.*
@@ -91,5 +94,4 @@ The script rejects input if any token:
 *Here's an interesting question: We know that not every name will work. But, what is the percentage that does? It seems to be pretty small.*
 
 *32 8 9 9 75 39 9 13 19*
-
 
