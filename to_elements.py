@@ -26,7 +26,7 @@ from elements_data import Element, symbol_lookup
 
 def normalize_text(text: str) -> str:
     """Remove all whitespace characters (spaces, tabs, newlines, etc.)."""
-    return "".join(text.split())
+    return "".join(c for c in text if c.isalpha())
 
 
 def find_symbol_sequence(
