@@ -125,9 +125,7 @@
 | 117 | Ts | Tennessine |
 | 118 | Og | Oganesson |
 
-## Alphabetical order
-
-# Periodic Table — Alphabetical by Symbol
+## Alphabetical by symbol
 
 | Symbol | Element Name | Atomic # |
 |:------:|--------------|--------:|
