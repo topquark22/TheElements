@@ -81,17 +81,17 @@ chmod +x "$TO" "$FROM" || true
 
 echo "== Test 1: whitespace ignored (basic) =="
 # "Geoffrey" example from earlier: expect specific output in default mode (atomic IDs)
-out="$(run_ok "$PYTHON" "$TO" Geoffrey)"
+out="$(run_ok "$PYTHON" "$TO" -n Geoffrey)"
 # The exact decomposition can vary depending on DP tie-breaks; but with current DP (1/2-letter)
 # it should consistently find: Ge O F F Re Y -> 32 8 9 9 75 39
 assert_eq "$out" "32 8 9 9 75 39"
 
 echo "== Test 2: Ignore spaces =="
-out="$(run_ok "$PYTHON" "$TO" "Ge  off    rey")"
+out="$(run_ok "$PYTHON" "$TO" -n "Ge  off    rey")"
 assert_eq "$out" "32 8 9 9 75 39"
 
 echo "== Test 3: Ignore all nonalphabetic characters =="
-out="$(run_ok "$PYTHON" "$TO" "Ge.off?r:ey/")"
+out="$(run_ok "$PYTHON" "$TO" -n "Ge.off?r:ey/")"
 assert_eq "$out" "32 8 9 9 75 39"
 
 echo "== Test 4: full mode outputs symbols + atomic IDs + names =="
@@ -112,7 +112,7 @@ out="$(run_ok "$PYTHON" "$TO" HDT)"
 assert_contains "$out" "Conversion not possible" "D/T should be unavailable without -t"
 
 echo "== Test 7: isotopes ON matches D/T and prints correct atomic IDs =="
-out="$(run_ok "$PYTHON" "$TO" -i HDT)"
+out="$(run_ok "$PYTHON" "$TO" -n -i HDT)"
 assert_eq "$out" "1 1.2 1.3"
 
 echo "== Test 8: isotopes ON matches D/T and prints correct full output =="
@@ -130,7 +130,7 @@ first_line="${out%%$'\n'*}"
 assert_eq "$first_line" "Ds Ra" "Expected Darmstadtium + Radium decomposition"
 
 echo "== Test 11: atomic_to_symbols basic round-trip =="
-ids="$(run_ok "$PYTHON" "$TO" Geoffrey)"
+ids="$(run_ok "$PYTHON" "$TO" -n Geoffrey)"
 sym="$(run_ok "$PYTHON" "$FROM" $ids)"
 assert_eq "$sym" "GeOFFReY"
 
