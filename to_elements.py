@@ -9,7 +9,7 @@ Use --symbols (or -s) to output symbols.
 Use --numbers (or -n) to output atomic numbers.
 Use --names (or -m) to output element names.
 
-Default mode is -n.
+Default mode is -s.
 
 Non-alphabetic characters in the input text are ignored.
 
@@ -18,7 +18,7 @@ Use --isotopes (or -i) to enable Hydrogen isotopes:
   T -> 1.3
 
 When isotopes are enabled, the algorithm prefers solutions that avoid D/T
-(minimizes isotope usage), e.g. "Dara" -> "Da Ra" rather than "D Ar" + failure.
+(minimizes isotope usage), e.g. "dsrati" -> "Ds Ra Ti" rather than "D Sr At I".
 """
 
 from __future__ import annotations
